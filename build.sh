@@ -1,5 +1,5 @@
-#!/usr/bin/env sh
+#/bin/sh
 
 set -xe
-g++ -Wall -Wextra -o run.o main.cpp
-./run.o
+clear
+python main.py
