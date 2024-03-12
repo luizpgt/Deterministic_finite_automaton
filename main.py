@@ -2,9 +2,13 @@ from scanner import read_file
 from input_types import get_line_type
 from controllers.input.regular_grammar import read_regular_grammar, print_symbols
 
-from models.state_transition_table import STTable
+from models.state_transition_table import Table
 # from models.token import Token
 # from state_transition_table import STTable
+
+# test table 
+
+TRANSITION_TABLE = [];
 
 if __name__ == "__main__":
     with open("./input_file.txt") as f:
@@ -22,3 +26,14 @@ if __name__ == "__main__":
     print("rules: ", rules);
     symbols = read_regular_grammar(rules);
     print_symbols(symbols);
+
+
+    # test table 
+    print("test table");
+    t = Table();
+    t.add_row();
+    t.add_row();
+    t.add_col();
+    t.add_col();
+
+    print(t);
