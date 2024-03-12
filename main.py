@@ -7,8 +7,9 @@ from models.state_transition_table import Table
 # from state_transition_table import STTable
 
 # test table 
-
 TRANSITION_TABLE = [];
+# test token
+from models.token import Token
 
 if __name__ == "__main__":
     with open("./input_file.txt") as f:
@@ -29,11 +30,18 @@ if __name__ == "__main__":
 
 
     # test table 
-    print("test table");
+    print("test table :::");
     t = Table();
-    t.add_row();
-    t.add_row();
-    t.add_col();
-    t.add_col();
 
+    # test token
+    to = Token("atomic");
+    to.add_to_table(t);
+    print(to);
+    tok = Token("bomb");
+    tok.add_to_table(t);
+    print(tok);
+    toke = Token("project");
+    toke.add_to_table(t);
+    print(toke);
+    
     print(t);
