@@ -4,7 +4,7 @@ INITIAL_STATE_SYMBOL = 'S';
 regular_grammar_re = r"<[^>]+>\s*::=\s*(?:[a-z]<[^>]+>\s*\|?\s*)+ε?\s*";
 
 
-class symbol_pair:
+class transition:
     def __init__(self, terminal, nonterminal):
         self.terminal = terminal;
         self.nonterminal = nonterminal;
@@ -31,11 +31,11 @@ def extract_symbols(rule):
 
     # save the rule symbol (left side symbol)
     rule_symbol = nonterminals.pop(0);
-    symbols.append(symbol_pair('', rule_symbol));
+    symbols.append(transition('', rule_symbol));
 
     # save pair (terminal, nonterminal)
     for terminal, nonterminal, in zip(terminals, nonterminals):
-        symbols.append(symbol_pair(terminal, nonterminal));
+        symbols.append(transition(terminal, nonterminal));
 
     return symbols;
 

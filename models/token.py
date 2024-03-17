@@ -6,7 +6,7 @@ class Token:
         return f"token: \"{self.word}\"";
 
     def add_to_table(self, table):
-        if len(self.word) < 1: return 
+        if len(self.word) < 1: return;
 
         # add first char 
         this_char_col = table.has_symbol_pos(self.word[0]);
