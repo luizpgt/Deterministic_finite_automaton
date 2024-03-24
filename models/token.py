@@ -13,7 +13,23 @@ class Token:
         if not this_char_col:
             this_char_col = table.cols;
             table.add_symbol_col(self.word[0]);
-        table.add_transition_node(table.INI_ST, table.rows, this_char_col);
+            new_node = table.rows;
+        else:
+            # indeterminism case 
+            new_node = [] 
+            old_node_value = table.get_node_value(table.INI_ST, this_char_col);
+            # if node has transition to nothing:
+            if old_node_value == 0: 
+                new_node = table.rows;
+            else: 
+                # if it already have other transitions, 
+                # check how many, and append
+                if type(old_node_value) == int:
+                    new_node.append(old_node_value);
+                    new_node.append(table.rows);
+                else:
+                    new_node = old_node_value + [table.rows];
+        table.add_transition_node(table.INI_ST, new_node, this_char_col);
         table.add_state_row();
 
         # add mean chars 

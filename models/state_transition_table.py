@@ -32,6 +32,10 @@ class Table:
                 return self.SYMBOLS[i][1];
         return 0;
 
+    def get_node_value(self, row, col):
+        if (row < self.rows) and (col < self.cols):
+            return self.matrix[row][col];
+
     def __str__(self):
         out = f"({self.rows}, {self.cols}) =>";
         for row in self.matrix:
