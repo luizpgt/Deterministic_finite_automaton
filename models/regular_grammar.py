@@ -31,7 +31,7 @@ class Regular_Grammar:
         terminals = re.findall(r'(\w)(?=<)', line);
         terminals += (re.findall(r'\|\s*(\w)(?!<)', line));
         non_terminals = re.findall(r'<([A-Z])>', line);
-        
+                
         # save rule symbol (left side symbol)
         transitions.append(Regular_Grammar.Transition('', non_terminals.pop(0)));
 
@@ -68,28 +68,50 @@ class Regular_Grammar:
             return (table.cols - 1);
 
         # this def will add all prods to the table
-        states = []; # list of tuple pairs (non_terminal, table_state)
+
+        # list of tuple pairs (non_terminal, table_state)
+        states = [];
 
         # add the initial state for the initial rule
         pair = (self.INITIAL_STATE_SYMBOL, table.INI_ST);
         states.append(pair);
 
-        # add all productions
+        # add all productions for each rule 
         for rule in self.rules:
-            # get left-side-symbol and its state (in table)
+            # get rule
             rule_symbol = (rule[0]).non_terminal;
             rule_state = set_xor_get_state(rule_symbol);
 
-            # for each production in rule
+            # for each prod in rule
             for transition in rule[1:]:
-                if transition.non_terminal:
-                    terminal_col = set_xor_get_terminal(transition.terminal);
-                    state = set_xor_get_state(transition.non_terminal);
-                else: # non_terminal == ''
-                    if not (transition.terminal == self.FINAL_STATE_SYMBOL):
-                        terminal_col = set_xor_get_terminal(transition.terminal);
+                # check if terminal is epsilon (does not adds to terminal row)
+                if transition.terminal == self.FINAL_STATE_SYMBOL:
                     table.mark_specific_final_state(rule_state);
-                table.add_transition_node(rule_state , state, terminal_col);
+                    continue;
+
+                if transition.terminal and transition.non_terminal:
+                    term_col = table.has_symbol_pos(transition.terminal);
+                    state_row = set_xor_get_state(transition.non_terminal);
+                    if not term_col:
+                        # adds terminal to the table
+                        term_col = table.cols;
+                        table.add_symbol_col(transition.terminal);
+                        node_value = state_row ;
+                    else:
+                        # indeterminism case 
+                        node_value = [];
+                        old_node_value = table.get_node_value(rule_state, term_col);
+                        # if node has no transition
+                        if old_node_value == 0:
+                            node_value = state_row;
+                        else:
+                            # if it already have other transitions
+                            if type(old_node_value) == int:
+                                node_value.append(old_node_value);
+                                node_value.append(state_row);
+                            else:
+                                node_value = old_node_value + [state_row];
+                    table.add_transition_node(rule_state, node_value, term_col);
 
 
     def __str__(self):

@@ -17,18 +17,20 @@ if __name__ == "__main__":
     t = Table();
 
     # test token
-    # to = Token("atomic");
+    # to = Token("at");
     # to.add_to_table(t);
     # print(to);
-    # tok = Token("bomb");
+    # tok = Token("abo");
     # tok.add_to_table(t);
     # print(tok);
-    # toke = Token("project");
+    # toke = Token("apr");
     # toke.add_to_table(t);
     # print(toke);
 
     # test regular_grammar 
-    rg = Regular_Grammar("<S> ::= a<A> | b<A>\n<A>::=c<S>|d<S>|ε");
+    rg = Regular_Grammar("<S> ::= a<A> | b<A>|a<S>\n<A>::=c<S>|d<S>|ε");
     rg.add_to_table(t);
     print(rg)
+
     print(t);
+
