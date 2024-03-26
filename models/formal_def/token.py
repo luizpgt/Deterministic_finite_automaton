@@ -1,5 +1,7 @@
 class Token:
-    def __init__(self):
-        pass;
+    def __init__(self, word):
+        self.word = word;
+        self.len  = len(word);
+
     def __str__(self):
-        pass;
+        return f"token: {self.word}";
