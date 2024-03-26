@@ -1,4 +1,4 @@
-from transition import Transition 
+from models.transition import Transition 
 
 epsilon = "ε";
 rg_final_state_flag = "fstate"

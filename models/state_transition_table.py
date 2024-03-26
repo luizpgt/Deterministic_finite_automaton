@@ -1,60 +1,43 @@
-class Table:
-    def __init__(self):
-        self.matrix = [[0], [1]];
-        self.rows   = 2;
-        self.cols   = 1;
-        self.INI_ST = 1; # initial state (q0) will ever be 1st row
-        self.END_ST = []; # final states will be on that list 
-        self.SYMBOLS= []; # all entry symbols are here
+class State_Transition_Table:
+    def __init__(self, finite_automata):
+        self.table = [[0]]; # multidimensional list
+        self.finite_automata = finite_automata;
 
-    def add_state_row(self):
-        self.matrix.append([self.rows] + zero_fill(self.cols - 1));
-        self.rows += 1;
+        self.represent_finite_automata();
 
-    def add_symbol_col(self, symbol): 
-        for row in self.matrix:
-            row.append(0);
-        self.matrix[0][-1] = symbol; # adiciona o "cabeçalho" da coluna 
-        self.SYMBOLS.append([symbol, self.cols]);
-        self.cols += 1;
 
-    def add_transition_node(self, state_p, state_n, col):
-        self.matrix[state_p][col] = state_n;
+    def represent_finite_automata(self):
+        # add terminals 
+        self.table[0].extend(self.finite_automata.alphabet);
 
-    def mark_final_state(self):
-        self.END_ST.append(self.rows - 1);
-    def mark_specific_final_state(self, state):
-        self.END_ST.append(state);
+        # add state rows
+        cols_ = len(self.table[0]);
+        for state in self.finite_automata.states:
+            self.table.append([state] + ((cols_-1)* [[]]));
 
-    def has_symbol_pos(self, symbol):
-        for i in range(0, len(self.SYMBOLS)):
-            if self.SYMBOLS[i][0] == symbol:
-                return self.SYMBOLS[i][1];
+        # add transitions 
+        self.add_transitions_to_table();
+
+    def add_transitions_to_table(self):
+        for transition in self.finite_automata.transition_functions:
+            col_ = self.get_symbol_position(transition.input_symbol);
+            row_ = transition.prev_state;
+            val_ = self.table[row_][col_] + [transition.next_state];
+            self.table[row_][col_] = val_;
+
+    def get_symbol_position(self, symbol):
+        symbols_list = self.table[0];
+        for i in range(1, len(symbols_list), 1):
+            if symbols_list[i] == symbol:
+                return i;
         return 0;
-
-    def get_node_value(self, row, col):
-        if (row < self.rows) and (col < self.cols):
-            return self.matrix[row][col];
+            
 
     def __str__(self):
-        out = f"({self.rows}, {self.cols}) =>";
-        for row in self.matrix:
-            out += '\n';
-            if (row[0] == self.INI_ST) and (row[0] in self.END_ST):
-                out += "->*" + str(row);
-            elif row[0] in self.END_ST:
-                out += " * " + str(row);
-            elif row[0] == self.INI_ST:
-                out += "-> " + str(row);
-            else:
-                out += "   " + str(row);
-        out += f"\nfinal states: {self.END_ST}";
-        out += f"\nentry symbols: ";
-        for pair in self.SYMBOLS:
-            out += pair[0] + ", ";
-        out += "\n";
+        out = "";
+        for row in self.table:
+            if row[0] == self.finite_automata.start_state: out += "->";
+            elif row[0] in self.finite_automata.accept_states: out += "* ";
+            else : out += "  ";
+            out += str(row) + "\n";
         return out;
-
-
-def zero_fill(n):
-    return [0] * n;
