@@ -1,5 +1,7 @@
 from transition import Transition 
 
+epsilon = "ε";
+rg_final_state_flag = "fstate"
 class Finite_Automata:
     def __init__(self):
         self.start_state = 1;             # initial state
@@ -39,7 +41,46 @@ class Finite_Automata:
 
     # REGULAR GRAMMAR
     def add_regular_grammar(self, regular_grammar):
-        pass;
+        states_dict = {"S": 1};
+
+        # note: a production is a Transition object
+        for production in regular_grammar.productions:
+            # capture meaningful symbols on the production
+            rg_prev_state_symbol = production.prev_state;
+            rg_terminal = production.input_symbol;
+            rg_next_state_symbol = production.next_state;
+
+
+            # capture prev_state 
+            if rg_prev_state_symbol in states_dict:
+                # if key exists on states_dict
+                prev_state = states_dict[rg_prev_state_symbol];
+            else:
+                # else: adds to states_dict
+                prev_state = self.create_new_state();
+                states_dict[rg_prev_state_symbol] = prev_state;
+
+            # apply epsilon rule
+            if (rg_prev_state_symbol == rg_next_state_symbol) and (rg_terminal == epsilon):
+                self.add_to_accept_states(states_dict[rg_prev_state_symbol]);
+                continue;
+
+            # capture terminal
+            self.add_alphabet_symbol(rg_terminal);
+
+            # capture next_state
+            if rg_next_state_symbol in states_dict:
+                next_state = states_dict[rg_next_state_symbol];
+            else: 
+                next_state = self.create_new_state();
+                states_dict[rg_next_state_symbol] = next_state;
+
+            # apply single terminal with no non_terminal rule
+            if rg_final_state_flag in rg_next_state_symbol:
+                self.add_to_accept_states(states_dict[rg_next_state_symbol]);
+
+            transition = Transition(prev_state, rg_terminal, next_state);
+            self.add_transition_function(transition);
 
 
     def __str__(self):
