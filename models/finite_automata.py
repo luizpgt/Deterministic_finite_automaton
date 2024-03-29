@@ -1,7 +1,9 @@
 from models.transition import Transition 
 
 epsilon = "ε";
-rg_final_state_flag = "fstate"
+rg_final_state_flag = "fstate";
+var_accept_state_prefix = "variable_";
+
 class Finite_Automata:
     def __init__(self):
         self.start_state = 1;             # initial state
@@ -22,8 +24,8 @@ class Finite_Automata:
     def add_transition_function(self, transition):
         self.transition_functions.append(transition);
 
-    def add_to_accept_states(self, state):
-        self.accept_states.append(state);
+    def add_to_accept_states(self, state, accept_value):
+        self.accept_states.append( (state, str(accept_value)) );
 
     # TOKEN
     def add_token(self, token):
@@ -36,7 +38,7 @@ class Finite_Automata:
             transition = Transition(prev_state, input_symbol, next_state);
             self.add_transition_function(transition);
             if i == token.len - 1:
-                self.add_to_accept_states(next_state);
+                self.add_to_accept_states(next_state, token.word);
             prev_state = next_state;
 
     # REGULAR GRAMMAR
@@ -62,7 +64,7 @@ class Finite_Automata:
 
             # apply epsilon rule
             if (rg_prev_state_symbol == rg_next_state_symbol) and (rg_terminal == epsilon):
-                self.add_to_accept_states(states_dict[rg_prev_state_symbol]);
+                self.add_to_accept_states(states_dict[rg_prev_state_symbol], str(var_accept_state_prefix + production.prev_state) );
                 continue;
 
             # capture terminal
@@ -77,7 +79,7 @@ class Finite_Automata:
 
             # apply single terminal with no non_terminal rule
             if rg_final_state_flag in rg_next_state_symbol:
-                self.add_to_accept_states(states_dict[rg_next_state_symbol]);
+                self.add_to_accept_states(states_dict[rg_next_state_symbol], str("grammar_" + production.prev_state) );
 
             transition = Transition(prev_state, rg_terminal, next_state);
             self.add_transition_function(transition);

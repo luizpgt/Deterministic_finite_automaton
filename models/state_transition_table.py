@@ -5,7 +5,6 @@ class State_Transition_Table:
 
         self.represent_finite_automata();
 
-
     def represent_finite_automata(self):
         # add terminals 
         self.table[0].extend(self.finite_automata.alphabet);
@@ -18,12 +17,14 @@ class State_Transition_Table:
         # add transitions 
         self.add_transitions_to_table();
 
+
     def add_transitions_to_table(self):
         for transition in self.finite_automata.transition_functions:
             col_ = self.get_symbol_position(transition.input_symbol);
             row_ = transition.prev_state;
             val_ = self.table[row_][col_] + [transition.next_state];
             self.table[row_][col_] = val_;
+
 
     def get_symbol_position(self, symbol):
         symbols_list = self.table[0];
@@ -32,12 +33,14 @@ class State_Transition_Table:
                 return i;
         return 0;
             
-
     def __str__(self):
         out = "";
+        accept_states = [];
+        for state in self.finite_automata.accept_states:
+            accept_states.append(state[0]);
         for row in self.table:
             if row[0] == self.finite_automata.start_state: out += "->";
-            elif row[0] in self.finite_automata.accept_states: out += "* ";
+            elif row[0] in accept_states: out += "* ";
             else : out += "  ";
             out += str(row) + "\n";
         return out;

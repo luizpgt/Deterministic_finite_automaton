@@ -1,36 +1,36 @@
-
 from models.transition import Transition
 from models.finite_automata import Finite_Automata
 from models.state_transition_table import State_Transition_Table
 from models.token import Token
 from models.regular_grammar import Regular_Grammar
+#from models.deterministic_state_transition_table import Deterministic_State_Transition_Table
+from input_.scanner import get_tokens_and_rg_from_file
 
 # ε
+
+input_filename = "input_file.txt";
+
+# read inputs
+tokens, regular_grammar = get_tokens_and_rg_from_file(input_filename);
 
 # create FINITE AUTOMATA 
 finite_automata = Finite_Automata();
 
 # add tokens to FINITE AUTOMATA
-token_1 = Token("se");
-token_2 = Token("entao");
-token_3 = Token("senao");
-# print(token_1);
-# print(token_2);
-# print(token_3);
-
-finite_automata.add_token(token_1);
-finite_automata.add_token(token_2);
-finite_automata.add_token(token_3);
+for token in tokens:
+    finite_automata.add_token(Token(token));
 
 # add regular grammar to FINITE AUTOMATA
-input_lines = list();
-input_lines.append("<S> ::= a<A> | e<A> | i<A> | o<A> | u<A>");
-input_lines.append("<A> ::= a<A> | e<A> | i<A> | o<A> | u<A> | ε");
-
-regular_grammar = Regular_Grammar(input_lines);
-# print(regular_grammar);
-finite_automata.add_regular_grammar(regular_grammar);
+finite_automata.add_regular_grammar(Regular_Grammar(regular_grammar));
 
 # create STATE TRANSITION TABLE
 state_transition_table = State_Transition_Table(finite_automata);
 print(state_transition_table);
+
+print("accept_states: ", end="");
+print(finite_automata.accept_states);
+exit();
+
+# create DETERMINISTIC STATE TRANSITION TABLE
+# deterministic_state_transition_table = Deterministic_State_Transition_Table(state_transition_table);
+# print(deterministic_state_transition_table);
