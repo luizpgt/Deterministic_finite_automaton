@@ -26,13 +26,16 @@ finite_automata.add_regular_grammar(Regular_Grammar(regular_grammar));
 
 # create STATE TRANSITION TABLE
 state_transition_table = State_Transition_Table(finite_automata);
-print(state_transition_table);
+# print(state_transition_table);
 
 # create DETERMINISTIC STATE TRANSITION TABLE
 deterministic_state_transition_table = Deterministic_State_Transition_Table(state_transition_table);
-print(deterministic_state_transition_table);
-print("TODO: add tokens/variable accept state to det table");
+# print(deterministic_state_transition_table);
 
 # print markdown:
 print(markdown_print_table(state_transition_table));
 print(markdown_print_table(deterministic_state_transition_table));
+
+# print deterministic accept_states:
+print("det accept_states: ");
+print(deterministic_state_transition_table.accept_states);

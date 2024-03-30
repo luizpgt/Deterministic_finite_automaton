@@ -1,16 +1,30 @@
-import copy 
-
 class Deterministic_State_Transition_Table:
     def __init__(self, state_transition_table):
         self.state_transition_table = state_transition_table;
 
         self.table = [ [[0]] + self.state_transition_table.finite_automata.alphabet ];
-        self.states = [[0]];
         self.cols = len(self.table[0]);
         self.rows = 1;
 
+ 
+        self.states = [[0]];
+        self.accept_states = []; # contains tuples: (state, accept_token/grammar)
         self.determinize();
 
+    def verify_and_add_accept_state(self, det_state):
+        nondet_accept_states = self.state_transition_table.finite_automata.accept_states;
+        accept_state = ([], '');
+
+        for nondet_state in det_state:
+            for nondet_accept_state in nondet_accept_states:
+                if nondet_state == nondet_accept_state[0]:
+                    if accept_state[1] and ("_variable_" in nondet_accept_state[1]):
+                        # filtra caso onde mesmo estado final reconhece gramática e token ao mesmo tempo
+                        continue;
+                    accept_state = (det_state, nondet_accept_state[1]);
+
+        if accept_state[0] and accept_state[1]: 
+            self.accept_states.append(accept_state);
 
     def state_index(self, state):
         for i in range(0, len(self.states), 1):
@@ -24,6 +38,7 @@ class Deterministic_State_Transition_Table:
         self.table.append( [state] + ((self.cols - 1) * [[]]));
         self.states.append(state);
         self.rows += 1;
+
 
     def add_transition_to_pos(self, row, col, value):
         for value_ in value: 
@@ -76,25 +91,8 @@ class Deterministic_State_Transition_Table:
                 if (transition_node not in self.states):
                     # adds to states and add state row
                     self.add_state(transition_node);
+                    self.verify_and_add_accept_state(transition_node);
             row += 1;
-
-
-    def capture_nondet_transitions(self):
-        det_transitions = [];
-        transitions = [];
-
-        alphabet = self.state_transition_table.finite_automata.alphabet;
-        states = self.state_transition_table.finite_automata.states;
-        nondet_table = self.state_transition_table.table;
-
-        for row in range(1, len(states) + 1, 1):
-            for col in range(1, len(alphabet) + 1, 1):
-                transition = nondet_table[row][col];
-                if (len(transition) > 0) and (transition  not in transitions) :
-                    if row == 1: det_transitions.append(transition);
-                    transitions.append(transition);
-                
-        return transitions, det_transitions;
 
 
     def __str__(self):

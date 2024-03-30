@@ -2,7 +2,7 @@ from models.transition import Transition
 
 epsilon = "ε";
 rg_final_state_flag = "fstate";
-var_accept_state_prefix = "variable_";
+var_accept_state_prefix = "_variable_";
 
 class Finite_Automata:
     def __init__(self):
