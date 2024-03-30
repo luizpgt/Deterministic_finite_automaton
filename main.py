@@ -5,6 +5,7 @@ from models.token import Token
 from models.regular_grammar import Regular_Grammar
 from models.deterministic_state_transition_table import Deterministic_State_Transition_Table
 from input_.scanner import get_tokens_and_rg_from_file
+from output_.printer import markdown_print_table
 
 # ε
 
@@ -31,3 +32,7 @@ print(state_transition_table);
 deterministic_state_transition_table = Deterministic_State_Transition_Table(state_transition_table);
 print(deterministic_state_transition_table);
 print("TODO: add tokens/variable accept state to det table");
+
+# print markdown:
+print(markdown_print_table(state_transition_table));
+print(markdown_print_table(deterministic_state_transition_table));
