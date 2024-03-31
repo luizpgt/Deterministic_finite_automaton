@@ -2,4 +2,5 @@
 
 set -xe
 clear
-python main.py
+python main.py > out.md
+glow out.md
