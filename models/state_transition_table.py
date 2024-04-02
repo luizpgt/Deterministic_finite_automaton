@@ -2,8 +2,17 @@ class State_Transition_Table:
     def __init__(self, finite_automata):
         self.table = [[0]]; # multidimensional list
         self.finite_automata = finite_automata;
+        self.error_state = 0;
 
         self.represent_finite_automata();
+        self.add_error_state();
+    
+    
+    def add_error_state(self):
+        for state_line in self.table[1:]:
+            for transition in state_line[1:]:
+                if len(transition) < 1: transition.append(self.error_state);
+
 
     def represent_finite_automata(self):
         # add terminals 

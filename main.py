@@ -59,6 +59,11 @@ if __name__ == "__main__":
     input_filename = "input_file.txt";
 
     deterministic_state_transition_table = generate_deterministic_state_transition_table(input_filename);
-
     markdown_print(deterministic_state_transition_table);
+    exit();
+
+    state_transition_table = generate_state_transition_table(input_filename);
+    markdown_print(state_transition_table);
+    exit();
+
 
