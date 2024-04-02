@@ -19,12 +19,18 @@ def markdown_print_table(table):
     for row in range(0, rows_, 1):
         out += " | ";
         # append col to accept_states
+        if row == 0: out += "Accept State";
         for accept_state in accept_states:
             if table[row][0] == accept_state[0]:
                 out += accept_state[1];
         out += " | ";
         for col in range(0, cols_, 1):
-            out += str(table[row][col])  + " |";
+            if table[row][col] == [0]: 
+                # escolhe printar "-" ao inves do estado de erro
+                # pela saúde visual do output.
+                out += "-"  + " |";
+            else: 
+                out += str(table[row][col])  + " |";
         out += "\n";
         if row == 0:
             for col in range(0, cols_ + 1, 1): # cols_ + (1)accept_state col

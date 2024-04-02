@@ -65,5 +65,3 @@ if __name__ == "__main__":
     state_transition_table = generate_state_transition_table(input_filename);
     markdown_print(state_transition_table);
     exit();
-
-
