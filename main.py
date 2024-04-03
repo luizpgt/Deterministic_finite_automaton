@@ -9,7 +9,7 @@ from output_.printer import markdown_print_table
 
 
 def read_inputs(filename):
-    tokens, regular_grammar = get_tokens_and_rg_from_file(input_filename);
+    tokens, regular_grammar = get_tokens_and_rg_from_file(filename);
     return tokens, regular_grammar;
 
 
