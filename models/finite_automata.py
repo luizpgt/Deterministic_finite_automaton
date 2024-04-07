@@ -1,8 +1,9 @@
 from models.transition import Transition 
+from models.regular_grammar import Regular_Grammar
 
 epsilon = "ε";
 rg_final_state_flag = "fstate";
-var_accept_state_prefix = "_variable_";
+var_accept_state_prefix = "_var_";
 
 class Finite_Automata:
     def __init__(self):
@@ -41,8 +42,16 @@ class Finite_Automata:
                 self.add_to_accept_states(next_state, token.word);
             prev_state = next_state;
 
+
+    def add_regular_grammars(self, regular_grammars):
+        i = 1;
+        for regular_grammar in regular_grammars:
+            self.add_regular_grammar(i, Regular_Grammar(regular_grammar));
+            i += 1
+
+
     # REGULAR GRAMMAR
-    def add_regular_grammar(self, regular_grammar):
+    def add_regular_grammar(self, grammar_num, regular_grammar):
         states_dict = {"S": 1};
 
         # note: a production is a Transition object
@@ -64,7 +73,7 @@ class Finite_Automata:
 
             # apply epsilon rule
             if (rg_prev_state_symbol == rg_next_state_symbol) and (rg_terminal == epsilon):
-                self.add_to_accept_states(states_dict[rg_prev_state_symbol], str(var_accept_state_prefix + production.prev_state) );
+                self.add_to_accept_states(states_dict[rg_prev_state_symbol], str(str(grammar_num) + var_accept_state_prefix + production.prev_state) );
                 continue;
 
             # capture terminal
@@ -77,9 +86,9 @@ class Finite_Automata:
                 next_state = self.create_new_state();
                 states_dict[rg_next_state_symbol] = next_state;
 
-            # apply single terminal with no non_terminal rule
+            # apply single terminal with no non_terminal rule: (...) | a 
             if rg_final_state_flag in rg_next_state_symbol:
-                self.add_to_accept_states(states_dict[rg_next_state_symbol], str("grammar_" + production.prev_state) );
+                self.add_to_accept_states(states_dict[rg_next_state_symbol], str(str(grammar_num) + var_accept_state_prefix  + production.prev_state) );
 
             transition = Transition(prev_state, rg_terminal, next_state);
             self.add_transition_function(transition);

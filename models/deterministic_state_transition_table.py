@@ -8,7 +8,7 @@ class Deterministic_State_Transition_Table:
 
  
         self.states = [[0]];
-        self.accept_states = []; # contains tuples: (state, accept_token/grammar)
+        self.accept_states = [([0], "ERROR")]; # contains tuples: (state, accept_token/grammar)
         self.error_state = 0;
         self.determinize();
 

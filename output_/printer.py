@@ -20,9 +20,10 @@ def markdown_print_table(table):
         out += " | ";
         # append col to accept_states
         if row == 0: out += "Accept State";
-        for accept_state in accept_states:
-            if table[row][0] == accept_state[0]:
-                out += accept_state[1];
+        else: 
+            for accept_state in accept_states:
+                if table[row][0] == accept_state[0]:
+                    out += accept_state[1];
         out += " | ";
         for col in range(0, cols_, 1):
             if table[row][col] == [0]: 
